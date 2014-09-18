@@ -83,7 +83,7 @@ repo1.current_branch 'module1/filename'
 repo1.current_revision 'module1/filename'
 ```
 
-## Current previous revision of a given file
+## Previous revision of a given file
 ```ruby
 repo1.previous_revision 'module1/filename'
 ```
