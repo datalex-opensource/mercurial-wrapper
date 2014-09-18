@@ -88,7 +88,7 @@ repo1.current_revision 'module1/filename'
 repo1.previous_revision 'module1/filename'
 ```
 
-## pull changesets
+## Pull changesets
 ```ruby
 repo1.pull 
 ```
