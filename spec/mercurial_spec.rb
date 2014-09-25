@@ -20,7 +20,6 @@ describe Mercurial do
     end
     mercurial_repo_server.init
     yield mercurial_repo_server.root if block_given?
-    # @server = mercurial_repo_server.serve
     mercurial_repo_server.add_remove
     mercurial_repo_server.commit 'user1', 'initial files', '1135425600 0'
     mercurial_repo_server.create_branch 'branch1', 'test_user', 'Creating a test branch'
@@ -131,10 +130,19 @@ describe Mercurial do
 
   it 'switches branches' do
     @test_repo.clone_repo @server_repo_dir
-    @test_repo.update_repo branch:'branch1'
+    @test_repo.update_repo(branch:'branch1')
     @test_repo.current_branch.should eq 'branch1'
-    @test_repo.update_repo branch: 'default'
+    @test_repo.update_repo(branch: 'default')
     @test_repo.current_branch.should eq 'default'
+  end
+
+  it 'logs all the revisions for module1/File1.java' do
+    @test_repo.clone_repo @server_repo_dir
+    options ={ limit: 1, user: 'test_user', branch: 'branch1'}
+    output = @test_repo.log options
+    expect(output.size).to eq(1)
+    expect(output[0][:user]).to eq('test_user')
+    expect(output[0][:branch]).to eq('branch1')
   end
 
   after(:each) do

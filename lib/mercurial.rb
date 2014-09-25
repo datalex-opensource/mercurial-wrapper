@@ -234,6 +234,41 @@ class Mercurial
     out.unlink if out
   end
 
+  def log(options={}, basedir = nil)
+    cmd = [hg, 'log']
+    cmd += ['-u', options[:user]] if options[:user]
+    cmd += ['-l', options[:limit].to_s] if options[:limit]
+    cmd += ['-v'] if options[:verbose] if options[:verbose]
+    cmd += ['-b', options[:branch]] if options[:branch]
+    cmd += ['-p', options[:patch].to_s] if options[:patch]
+    cmd += ['-r', options[:revision].to_s] if options[:revision]
+    cmd += [options[:filename]] if options[:filename]
+    lines =  execute_command(cmd, basedir).lines.map(&:chomp)
+    return lines if options[:raw]
+    to_log_structure(lines)
+  end
+
+  private
+
+  def to_log_structure(lines)
+    elem = {}
+    result = []
+    iterator = lines.each
+    begin
+      while true
+        line = iterator.next
+        result << elem and elem = {} if line.strip.empty? and not elem.empty?
+        unless line.strip.empty?
+          key, value = line.split(':', 2).map { |item| item.strip.chomp }
+          value = iterator.next if value.empty?
+          elem[key.to_sym] = value
+        end
+      end
+    rescue StopIteration
+    end
+    result
+  end
+
 end
 
 

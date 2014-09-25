@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'mercurial-wrapper'
-  s.version     = '0.8.4'
+  s.version     = '0.8.5'
   s.date        = '2014-09-11'
   s.summary     = 'Mercurial command line ruby wrapper'
   s.description = 'A simple wrapper around HG command line tool'
